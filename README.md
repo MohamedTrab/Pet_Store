@@ -8,7 +8,6 @@ El proyecto **Pet Store** es una aplicación web desarrollada com. Esta aplicaci
 - **Base de Datos**: PostgreSQL.
 - **Contenedores**: Docker y Docker Compose.
 - **Orquestación**: Kubernetes.
-- **Frontend**: Tecnologías estáticas integradas (HTML, CSS, JS).
 - **Documentación API**: Swagger (Flasgger).
 - **Mensajería**: RabbitMQ.
 
