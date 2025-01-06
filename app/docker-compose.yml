@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: pet_store_app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL_USERS=postgresql://postgres:postgres@dbUsers:5432/users_db
+      - DATABASE_URL_PRODUCTS=postgresql://postgres:postgres@dbProducts:5433/products_db
+      - DATABASE_URL_ORDERS=postgresql://postgres:postgres@dbOrders:5434/orders_db
+      - DATABASE_URL_REVIEWS=postgresql://postgres:postgres@dbReviews:5435/reviews_db
+      - DATABASE_URL_PETS=postgresql://postgres:postgres@dbPets:5436/pets_db
+    depends_on:
+      - dbUsers
+      - dbProducts
+      - dbOrders
+      - dbReviews
+      - dbPets
+      - rabbitmq
+    volumes:
+      - .:/app
+    networks:
+      - pet_store_network
+
+  dbUsers:
+    image: postgres:latest
+    container_name: pet_store_db_users
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: users_db
+    volumes:
+      - postgres_data_users:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pet_store_network
+
+  dbProducts:
+    image: postgres:latest
+    container_name: pet_store_db_products
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: products_db
+    volumes:
+      - postgres_data_products:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - pet_store_network
+
+  dbOrders:
+    image: postgres:latest
+    container_name: pet_store_db_orders
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orders_db
+    volumes:
+      - postgres_data_orders:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    networks:
+      - pet_store_network
+
+  dbReviews:
+    image: postgres:latest
+    container_name: pet_store_db_reviews
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: reviews_db
+    volumes:
+      - postgres_data_reviews:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    networks:
+      - pet_store_network
+
+  dbPets:
+    image: postgres:latest
+    container_name: pet_store_db_pets
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: pets_db
+    volumes:
+      - postgres_data_pets:/var/lib/postgresql/data
+    ports:
+      - "5436:5432"
+    networks:
+      - pet_store_network
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: pet_store_rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - pet_store_network
+
+volumes:
+  postgres_data_users:
+  postgres_data_products:
+  postgres_data_orders:
+  postgres_data_reviews:
+  postgres_data_pets:
+
+networks:
+  pet_store_network:

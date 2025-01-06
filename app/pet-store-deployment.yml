@@ -1,0 +1,314 @@
+# Déploiement de l'application principale (pet-store-app)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pet-store-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pet-store-app
+  template:
+    metadata:
+      labels:
+        app: pet-store-app
+    spec:
+      containers:
+        - name: pet-store-app
+          image: localhost:5000/app-app:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL_USERS
+              value: "postgresql://postgres:postgres@db-users:5432/users_db"
+            - name: DATABASE_URL_PRODUCTS
+              value: "postgresql://postgres:postgres@db-products:5433/products_db"
+            - name: DATABASE_URL_ORDERS
+              value: "postgresql://postgres:postgres@db-orders:5434/orders_db"
+            - name: DATABASE_URL_REVIEWS
+              value: "postgresql://postgres:postgres@db-reviews:5435/reviews_db"
+            - name: DATABASE_URL_PETS
+              value: "postgresql://postgres:postgres@db-pets:5436/pets_db"
+          volumeMounts:
+            - name: app-volume
+              mountPath: /app
+      volumes:
+        - name: app-volume
+          emptyDir: {}
+
+---
+# Service pour l'application principale (pet-store-app)
+apiVersion: v1
+kind: Service
+metadata:
+  name: pet-store-app
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8000
+  selector:
+    app: pet-store-app
+
+---
+# Déploiement et service pour db-users
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-users
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-users
+  template:
+    metadata:
+      labels:
+        app: db-users
+    spec:
+      containers:
+        - name: db-users
+          image: postgres:latest
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "users_db"
+          volumeMounts:
+            - name: db-users-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-users-volume
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-users
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: db-users
+
+---
+# Déploiement et service pour db-products
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-products
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-products
+  template:
+    metadata:
+      labels:
+        app: db-products
+    spec:
+      containers:
+        - name: db-products
+          image: postgres:latest
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "products_db"
+          volumeMounts:
+            - name: db-products-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-products-volume
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-products
+spec:
+  ports:
+    - port: 5433
+  selector:
+    app: db-products
+
+---
+# Déploiement et service pour db-orders
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-orders
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-orders
+  template:
+    metadata:
+      labels:
+        app: db-orders
+    spec:
+      containers:
+        - name: db-orders
+          image: postgres:latest
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "orders_db"
+          volumeMounts:
+            - name: db-orders-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-orders-volume
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-orders
+spec:
+  ports:
+    - port: 5434
+  selector:
+    app: db-orders
+
+---
+# Déploiement et service pour db-reviews
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-reviews
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-reviews
+  template:
+    metadata:
+      labels:
+        app: db-reviews
+    spec:
+      containers:
+        - name: db-reviews
+          image: postgres:latest
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "reviews_db"
+          volumeMounts:
+            - name: db-reviews-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-reviews-volume
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-reviews
+spec:
+  ports:
+    - port: 5435
+  selector:
+    app: db-reviews
+
+---
+# Déploiement et service pour db-pets
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-pets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-pets
+  template:
+    metadata:
+      labels:
+        app: db-pets
+    spec:
+      containers:
+        - name: db-pets
+          image: postgres:latest
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "pets_db"
+          volumeMounts:
+            - name: db-pets-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-pets-volume
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-pets
+spec:
+  ports:
+    - port: 5436
+  selector:
+    app: db-pets
+
+---
+# Déploiement et service pour rabbitmq
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:management
+          ports:
+            - containerPort: 15672
+            - containerPort: 5672
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: "guest"
+            - name: RABBITMQ_DEFAULT_PASS
+              value: "guest"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+spec:
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: 5672
+    - name: management 
+      port: 15672
+      targetPort: 15672
+  selector:
+    app: rabbitmq

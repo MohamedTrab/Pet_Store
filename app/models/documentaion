@@ -1,0 +1,19 @@
+One-to-One:
+
+User to Cart (each user can have only one cart).
+One-to-Many:
+
+User to Orders, Reviews, Pets (a user can have many orders, reviews, and pets).
+Product to Reviews (a product can have many reviews).
+Category to Products (a category can have many products).
+Order to OrderItems (an order can have many items).
+Cart to CartItems (a cart can have many items).
+Many-to-One:
+
+Review to Product (many reviews can be written for one product).
+Review to User (many reviews can be written by one user).
+Pet to User (many pets can be owned by one user).
+OrderItem to Product (many items can reference one product).
+OrderItem to Order (many items can belong to one order).
+CartItem to Product (many cart items can refer to one product).
+CartItem to Cart (many cart items can belong to one cart).
