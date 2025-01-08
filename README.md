@@ -245,5 +245,5 @@ Cada servicio expone APIs REST documentadas con Swagger (OpenAPI).
           type: Utilization
           averageUtilization: 75
   ```
-- **Monitorización**: Utiliza herramientas como Prometheus y Grafana para supervisar el rendimiento y la disponibilidad.
+
 
