@@ -247,6 +247,3 @@ Cada servicio expone APIs REST documentadas con Swagger (OpenAPI).
   ```
 - **Monitorización**: Utiliza herramientas como Prometheus y Grafana para supervisar el rendimiento y la disponibilidad.
 
-## Licencia
-Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más detalles.
-
